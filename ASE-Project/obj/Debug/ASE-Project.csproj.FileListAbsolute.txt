@@ -2,8 +2,8 @@ C:\Users\Will\source\repos\ASE-Project\ASE-Project\bin\Debug\ASE-Project.exe.con
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\bin\Debug\ASE-Project.exe
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\bin\Debug\ASE-Project.pdb
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE-Project.csprojAssemblyReference.cache
-C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE_Project.Form1.resources
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE_Project.Properties.Resources.resources
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE-Project.csproj.GenerateResource.cache
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE-Project.exe
 C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE-Project.pdb
+C:\Users\Will\source\repos\ASE-Project\ASE-Project\obj\Debug\ASE_Project.Form1.resources
