@@ -7,20 +7,19 @@ using System.Drawing;
 
 namespace ASE_Project
 {
-    class Triangle :Shapes
+    class Line : Shapes
     {
-        private int sideA, sideB, sideC;
-        public Triangle(int xPos, int yPos, int sideA, int sideB, int sideC) : base(xPos, yPos)
+        private int xEnd, yEnd;
+        public Line(int xPos, int yPos, int xEnd, int yEnd) : base(xPos, yPos)
         {
-            this.sideA = sideA;
-            this.sideB = sideB;
-            this.sideC = sideC;
+            this.xEnd = xEnd;
+            this.yEnd = yEnd;
         }
 
         public override void draw(Graphics g)
         {
             Pen p = new Pen(Color.Black, 2);
-            //g.DrawPolygon(p, )
+            g.DrawLine(p, xPos, yPos, xEnd, yEnd);
         }
     }
 }
