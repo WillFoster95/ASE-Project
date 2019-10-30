@@ -17,6 +17,6 @@ namespace ASE_Project
             this.yPos = yPos;
         }
 
-        public abstract void draw(Graphics g);
+        public abstract void draw(Graphics g); // Can Pen be moved to here?
     }
 }
