@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,12 +45,11 @@ namespace ASE_Project
             command = formatInstruction(command);           
             commandParts = command.Split(' ');
 
-            checkVaildCommand();
-            checkVaildParameters();
+            checkVaildCommand(commandParts[0]);                       
             
             if (!commandParts[0].Equals("run"))
-            {
-                exeCommand(command);
+            {                               
+                exeCommand(command);                            
             }            
             else if (commandParts[0].Equals("run"))
             {
@@ -61,51 +61,67 @@ namespace ASE_Project
                     exeCommand(commandList[i]);
                 }
             }
+            else
+            {
+                console.Text += "Invalid Command: \"" + commandParts[0] + "\"\n";
+            }
         }
 
-        private void checkVaildParameters()
+        private void checkVaildCommand(string command)
         {
-            throw new NotImplementedException();
-        }
-
-        private void checkVaildCommand()
-        {
-            throw new NotImplementedException();
-        }
+            bool valid = false;
+            if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle")|| 
+                command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen"))
+            {
+                valid = true;
+            }
+            if (!valid)
+            {
+                console.Text += "Invalid Command: \"" + command + "\"\n";
+            }
+        }       
 
         private void exeCommand(string instruction)
         {
             instruction = formatInstruction(instruction);
             commandParts = instruction.Split(' ');
+            checkVaildCommand(commandParts[0]);            
+            try
+            {
 
-            if (commandParts[0].Equals("moveto"))                               // Move pen command
-            {
-                movePen(Convert.ToInt32(commandParts[1]), Convert.ToInt32(commandParts[2]));        // Simplifiable?                
+                if (commandParts[0].Equals("moveto"))                               // Move pen command
+                {
+                    movePen(Convert.ToInt32(commandParts[1]), Convert.ToInt32(commandParts[2]));        // Simplifiable?                
+                }
+                else if (commandParts[0].Equals("drawto"))                          // Draw line command
+                {
+                    Shapes L = new Line(penXPos, penYPos, Convert.ToInt32(commandParts[1]), Convert.ToInt32(commandParts[2]));      // Simplifiable?
+                    L.draw(g);
+                    movePen(Convert.ToInt32(commandParts[1]), Convert.ToInt32(commandParts[2]));        // Simplifiable?
+                }
+                else if (commandParts[0].Equals("circle"))                          // Circle command
+                {
+                    radius = Convert.ToInt32(commandParts[1]);
+                    Shapes C = new Circle(penXPos - radius, penYPos - radius, radius);  // this object should be removed from memory on clear?
+                    C.draw(g);
+                }
+                else if (commandParts[0].Equals("rectangle"))                       // Rectangle command
+                {
+                    width = Convert.ToInt32(commandParts[1]);
+                    height = Convert.ToInt32(commandParts[2]);
+                    Shapes R = new Rectangle(penXPos - (width / 2), penYPos - (height / 2), width, height);
+                    R.draw(g);
+                }
+                else if (commandParts[0].Equals("triangle"))                        // Triangle command
+                {
+                    //ToDo. Draws triangle
+                }
             }
-            else if (commandParts[0].Equals("drawto"))                          // Draw line command
+            catch
             {
-                Shapes L = new Line(penXPos, penYPos, Convert.ToInt32(commandParts[1]), Convert.ToInt32(commandParts[2]));      // Simplifiable?
-                L.draw(g);
-                movePen(Convert.ToInt32(commandParts[1]), Convert.ToInt32(commandParts[2]));        // Simplifiable?
+                console.Text += "Invalid parameter\n";
             }
-            else if (commandParts[0].Equals("circle"))                          // Circle command
-            {
-                radius = Convert.ToInt32(commandParts[1]);
-                Shapes C = new Circle(penXPos - radius, penYPos - radius, radius);  // this object should be removed from memory on clear?
-                C.draw(g);
-            }
-            else if (commandParts[0].Equals("rectangle"))                       // Rectangle command
-            {
-                width = Convert.ToInt32(commandParts[1]);
-                height = Convert.ToInt32(commandParts[2]);
-                Shapes R = new Rectangle(penXPos - (width / 2), penYPos - (height / 2), width, height);
-                R.draw(g);
-            }
-            else if (commandParts[0].Equals("triangle"))                        // Triangle command
-            {
-                //ToDo. Draws triangle
-            }
-            else if (commandParts[0].Equals("clear"))                           // Clear paint window command
+            if (commandParts[0].Equals("clear"))                           // Clear paint window command
             {
                 paintWindow.Refresh();  //this may not work all the time? 
                 console.Text = "";                                              // Console cleared too
@@ -128,6 +144,15 @@ namespace ASE_Project
             penXPos = x;
             penYPos = y;
             console.Text += ("Pen moved to: " + penXPos + ", " + penYPos + "\n");
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            File.WriteAllText("C:\\Users\\Will\\Desktop\\test.txt", codeWindow.Text);
+        }
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            codeWindow.Text = File.ReadAllText("C:\\Users\\Will\\Desktop\\test.txt");
         }
     }
 }

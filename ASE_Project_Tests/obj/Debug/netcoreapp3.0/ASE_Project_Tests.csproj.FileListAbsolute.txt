@@ -1,0 +1,3 @@
+C:\Users\Will\source\repos\ASE-Project\ASE_Project_Tests\obj\Debug\netcoreapp3.0\ASE_Project_Tests.csprojAssemblyReference.cache
+C:\Users\Will\source\repos\ASE-Project\ASE_Project_Tests\obj\Debug\netcoreapp3.0\ASE_Project_Tests.AssemblyInfoInputs.cache
+C:\Users\Will\source\repos\ASE-Project\ASE_Project_Tests\obj\Debug\netcoreapp3.0\ASE_Project_Tests.AssemblyInfo.cs
