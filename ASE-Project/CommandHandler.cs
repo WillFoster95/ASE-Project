@@ -11,10 +11,10 @@ namespace ASE_Project
     {
         private string command, consoleMessage;
         private string[] commandParts;
-        private int parameter1, parameter2;
+        private int parameter1, parameter2, parameter3;
         private int penXPos, penYPos;
         private int radius, height, width;
-        bool invalidParameter;
+        bool invalidParameter, invalidTriangle;
         Graphics g;
         public CommandHandler(string command, int penXPos, int penYPos)
         {          
@@ -72,7 +72,17 @@ namespace ASE_Project
                 }
                 else if (commandParts[0].Equals("triangle"))                        // Triangle command
                 {
-                    //ToDo. Draws triangle
+                    parameter1 = convertParameter(commandParts[1]);
+                    parameter2 = convertParameter(commandParts[2]);
+                    if(!invalidParameter)
+                    {
+                        //checkValidTriangle(parameter1, parameter2, parameter3);
+                        //if(!invalidTriangle)
+                        //{
+                            Shapes T = new Triangle(penXPos, penYPos, parameter1, parameter2);
+                            T.draw(g);
+                        //}                       
+                    }
                 }
                 else if (commandParts[0].Equals("clear"))                           // Clear paint window command
                 {
@@ -89,6 +99,17 @@ namespace ASE_Project
                 consoleMessage += "Missing Parameter\n";
             }
         }
+
+        /*
+        private void checkValidTriangle(int parameter1, int parameter2, int parameter3)
+        {
+            invalidTriangle = false;
+            if (parameter1 + parameter2 <= parameter3 || parameter1 + parameter3 <= parameter2 || parameter2 + parameter3 <= parameter1)
+            {
+                invalidTriangle = true;
+            }          
+        }
+        */
 
         public string getMessage()
         {

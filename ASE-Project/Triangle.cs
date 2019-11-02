@@ -10,17 +10,24 @@ namespace ASE_Project
     class Triangle :Shapes
     {
         private int sideA, sideB, sideC;
-        public Triangle(int xPos, int yPos, int sideA, int sideB, int sideC) : base(xPos, yPos)
+        private int corner1X, corner1Y, corner2X, corner2Y, corner3X, corner3Y;
+        public Triangle(int xPos, int yPos, int sideA, int sideB) : base(xPos, yPos)
         {
-            this.sideA = sideA;
-            this.sideB = sideB;
-            this.sideC = sideC;
+            corner1X = xPos;
+            corner1Y = yPos;
+            corner2X = xPos + sideA;
+            corner2Y = yPos;
+            corner3X = xPos + sideA;
+            corner3Y = yPos + sideB;
         }
 
         public override void draw(Graphics g)
         {
             Pen p = new Pen(Color.Black, 2);
-            //g.DrawPolygon(p, )
-        }
+            g.DrawLine(p, corner1X, corner1Y, corner2X, corner2Y);
+            g.DrawLine(p, corner2X, corner2Y, corner3X, corner3Y);
+            g.DrawLine(p, corner3X, corner3Y, corner1X, corner1Y);
+
+        }       
     }
 }
