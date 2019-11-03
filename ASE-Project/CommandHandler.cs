@@ -14,7 +14,7 @@ namespace ASE_Project
         private int parameter1, parameter2, parameter3;
         private int penXPos, penYPos;
         private int radius, height, width;
-        bool invalidParameter, invalidTriangle;
+        bool invalidParameter, invalidTriangle, parameterOutOfBounds;
         Graphics g;
         public CommandHandler(string command, int penXPos, int penYPos)
         {          
@@ -34,7 +34,8 @@ namespace ASE_Project
                 {
                     parameter1 = convertParameter(commandParts[1]);
                     parameter2 = convertParameter(commandParts[2]);
-                    if (!invalidParameter)
+                    parameterOutOfBounds = checkParameterOutOfBounds(parameter1, parameter2);                   
+                    if (!invalidParameter && !parameterOutOfBounds)
                     {
                         movePen(parameter1, parameter2);
                     }
@@ -44,7 +45,7 @@ namespace ASE_Project
                 {
                     parameter1 = convertParameter(commandParts[1]);
                     parameter2 = convertParameter(commandParts[2]);
-                    if (!invalidParameter)
+                    if (!invalidParameter && !parameterOutOfBounds)
                     {
                         Shapes L = new Line(penXPos, penYPos, parameter1, parameter2);      // Simplifiable?
                         L.draw(g);
@@ -171,6 +172,20 @@ namespace ASE_Project
                 invalidParameter = true;
             }
             return param;
+        }
+        private bool checkParameterOutOfBounds(int xParam, int yParam)
+        {            
+            if (xParam > 445 || xParam < 0)
+            {
+                consoleMessage += "\"" + xParam + "\" " + "is out of bounds\n";
+                return true;
+            }
+            if (yParam > 409 || yParam < 0)
+            {
+                consoleMessage += "\"" + yParam + "\" " + "is out of bounds\n";
+                return true;
+            }
+            return false;
         }
     }
 }

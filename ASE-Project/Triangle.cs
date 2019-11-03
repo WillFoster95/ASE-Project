@@ -13,12 +13,12 @@ namespace ASE_Project
         private int corner1X, corner1Y, corner2X, corner2Y, corner3X, corner3Y;
         public Triangle(int xPos, int yPos, int sideA, int sideB) : base(xPos, yPos)
         {
-            corner1X = xPos;
-            corner1Y = yPos;
-            corner2X = xPos + sideA;
-            corner2Y = yPos;
-            corner3X = xPos + sideA;
-            corner3Y = yPos + sideB;
+            corner1X = xPos - sideA/2;
+            corner1Y = yPos + sideB/2;
+            corner2X = xPos + sideA/2;
+            corner2Y = yPos + sideB/2;
+            corner3X = xPos;
+            corner3Y = yPos - sideB/2;
         }
 
         public override void draw(Graphics g)
