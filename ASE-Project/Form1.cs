@@ -83,11 +83,20 @@ namespace ASE_Project
       
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            File.WriteAllText("C:\\Users\\Will\\Desktop\\test.txt", codeWindow.Text);
+            saveFileDialog1.ShowDialog();            
         }
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {                    
+            File.WriteAllText(saveFileDialog1.FileName, codeWindow.Text);
+        }
+
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            codeWindow.Text = File.ReadAllText("C:\\Users\\Will\\Desktop\\test.txt");
+            openFileDialog1.ShowDialog();
+        }
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            codeWindow.Text = File.ReadAllText(openFileDialog1.FileName);
         }
     }
 }
