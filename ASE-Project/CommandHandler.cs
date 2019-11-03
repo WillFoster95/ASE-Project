@@ -151,6 +151,7 @@ namespace ASE_Project
         {
             penXPos = x;
             penYPos = y;
+            consoleMessage += "Pen Moved to: " + x + ", " + y;
         }
         private string formatInstruction(string instruction)
         {
