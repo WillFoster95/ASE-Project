@@ -9,12 +9,13 @@ namespace ASE_Project
 {
     public class CommandHandler
     {
-        private string command, consoleMessage;
+        private string command, consoleMessage = "";
         private string[] commandParts;
         private int parameter1, parameter2, parameter3;
         private int penXPos, penYPos;
         private int radius, height, width;
         bool invalidParameter, invalidTriangle, parameterOutOfBounds;
+       
         Graphics g;
         public CommandHandler(string command, int penXPos, int penYPos)
         {          
@@ -127,6 +128,7 @@ namespace ASE_Project
             }
             else
             {
+                consoleMessage += "Invalid Command: \"" + getCommand() + "\"\n";
                 return valid;
             }            
         }
@@ -188,5 +190,16 @@ namespace ASE_Project
             }
             return false;
         }
+
+        public string getMethodName()
+        {
+            return "";
+        }
+
+        public int getVariableValue(string varName)
+        {
+            return 0;
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ASE_Project;
-using System.Drawing; 
+using System.Drawing;
+using System;
 
 namespace ASE_Project_Tests
 {
@@ -38,6 +39,28 @@ namespace ASE_Project_Tests
             CommandHandler ch = new CommandHandler(command, penXPos, penYPos);
 
             int actual = ch.getPenYPos();
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void getMessage_WithValidCommand()
+        {
+            string command = "Run", expected = "";
+            int penXPos = 0, penYPos = 0;
+            CommandHandler ch = new CommandHandler(command, penXPos, penYPos);
+            ch.checkCommandValid();
+            string actual = ch.getMessage();
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void getMessage_WithInValidCommand()
+        {
+            string command = "fan", expected = "Invalid Command: \"fan\"\n";
+            int penXPos = 0, penYPos = 0;
+            CommandHandler ch = new CommandHandler(command, penXPos, penYPos);
+            ch.checkCommandValid();
+            string actual = ch.getMessage();        
 
             Assert.AreEqual(expected, actual);
         }

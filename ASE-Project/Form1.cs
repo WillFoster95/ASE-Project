@@ -47,7 +47,8 @@ namespace ASE_Project
             commandValid = ch.checkCommandValid();
             if (!commandValid)
             {
-                console.Text += "Invalid Command: \"" + ch.getCommand() + "\"\n";                
+                //console.Text += "Invalid Command: \"" + ch.getCommand() + "\"\n";
+                console.Text += ch.getMessage();
             }                                                
             else if (!ch.getCommand().Equals("run"))
             {                               
@@ -67,7 +68,8 @@ namespace ASE_Project
                     ch.setGraphicsObject(g);
                     if (!ch.checkCommandValid())
                     {
-                        console.Text += "Invalid Command: \"" + ch.getCommand() + "\"\n";
+                        //console.Text += "Invalid Command: \"" + ch.getCommand() + "\"\n";
+                        console.Text += ch.getMessage();
                     }
                     else
                     {
