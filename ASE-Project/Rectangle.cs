@@ -16,6 +16,13 @@ namespace ASE_Project
             this.height = height;
         }
 
+        public override void setParams(params int[] dimensions)
+        {            
+            base.setParams(dimensions[0], dimensions[1]);
+            this.width = dimensions[2];
+            this.height = dimensions[3];
+        }
+
         public override void draw(Graphics g)
         {
             Pen p = new Pen(Color.Black, 2);

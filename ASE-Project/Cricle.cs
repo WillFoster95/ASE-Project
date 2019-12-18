@@ -14,7 +14,11 @@ namespace ASE_Project
         {
             this.radius = radius;
         }
-
+        public override void setParams(params int[] dimensions)
+        {
+            base.setParams(dimensions[0], dimensions[1]);
+            this.radius = dimensions[2];            
+        }
         public override void draw(Graphics g)
         {
             Pen p = new Pen(Color.Black, 2);

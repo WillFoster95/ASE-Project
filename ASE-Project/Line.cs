@@ -15,6 +15,12 @@ namespace ASE_Project
             this.xEnd = xEnd;
             this.yEnd = yEnd;
         }
+        public override void setParams(params int[] dimensions)
+        {
+            base.setParams(dimensions[0], dimensions[1]);
+            this.xEnd = dimensions[2];
+            this.yEnd = dimensions[3];
+        }
 
         public override void draw(Graphics g)
         {

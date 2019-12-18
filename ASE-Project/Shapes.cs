@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace ASE_Project
 {
-    abstract class Shapes
+    abstract class Shapes : IShapes
     {
         protected int xPos, yPos;
 
@@ -15,6 +15,11 @@ namespace ASE_Project
         {
             this.xPos = xPos;
             this.yPos = yPos;
+        }
+        public virtual void setParams(params int[] dimensions)
+        {
+            this.xPos = dimensions[0];
+            this.yPos = dimensions[1];
         }
 
         public abstract void draw(Graphics g); // Can Pen be moved to here?
