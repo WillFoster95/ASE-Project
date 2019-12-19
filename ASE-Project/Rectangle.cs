@@ -32,7 +32,7 @@ namespace ASE_Project
         public override void draw(Graphics g)
         {
             Pen p = new Pen(Color.Black, 2);
-            g.DrawRectangle(p, xPos, yPos, width, height);
+            g.DrawRectangle(p, xPos - width/2, yPos - height/2, width, height);
         }
     }
 }

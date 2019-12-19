@@ -18,7 +18,7 @@ namespace ASE_Project
     public partial class Form1 : Form
     {
         private string command;
-        private string[] commandParts, commandList;
+        private string[] commandList;
         private int penXPos, penYPos;        
         private Graphics g;
         private string codeWindowText;
@@ -30,19 +30,17 @@ namespace ASE_Project
         }
 
         private void Form1_Load(object sender, EventArgs e)                     //Runs on Load
-        {
-            g = paintWindow.CreateGraphics();           
+        {            
+            g = paintWindow.CreateGraphics();    
+            ch = new CommandHandler(g);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {            
-            command = commandLine.Text;
-            ch = new CommandHandler(command, penXPos, penYPos);
-            ch.setGraphicsObject(g);
-            commandValid = ch.checkCommandValid();
-            if (!commandValid)
-            {
-                //console.Text += "Invalid Command: \"" + ch.getCommand() + "\"\n";
+        {
+            ch.newCommand(commandLine.Text, penXPos, penYPos);
+            if (!ch.checkCommandValid())
+            {                
                 console.Text += ch.getMessage();
             }                                                
             else if (!ch.getCommand().Equals("run"))
@@ -59,11 +57,9 @@ namespace ASE_Project
                 
                 for (int i = 0; i < commandList.Length; i++)
                 {
-                    ch = new CommandHandler(commandList[i], penXPos, penYPos);
-                    ch.setGraphicsObject(g);
+                    ch.newCommand(commandList[i], penXPos, penYPos);
                     if (!ch.checkCommandValid())
-                    {
-                        //console.Text += "Invalid Command: \"" + ch.getCommand() + "\"\n";
+                    {                        
                         console.Text += ch.getMessage();
                     }
                     else
@@ -72,12 +68,13 @@ namespace ASE_Project
                         console.Text += ch.getMessage();
                         penXPos = ch.getPenXPos();
                         penYPos = ch.getPenYPos();
-                    }
-                    
+                    }                   
                 }
-            }                                
+            }          
         }            
-      
+
+
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();            
@@ -86,7 +83,6 @@ namespace ASE_Project
         {                    
             File.WriteAllText(saveFileDialog1.FileName, codeWindow.Text);
         }
-
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
