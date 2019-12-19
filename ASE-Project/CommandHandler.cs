@@ -17,11 +17,11 @@ namespace ASE_Project
         bool invalidParameter, invalidTriangle, parameterOutOfBounds;
        
         Graphics g;
+
         public CommandHandler(string command, int penXPos, int penYPos)
         {          
             command = formatInstruction(command);
             commandParts = command.Split(' ');
-
             this.command = commandParts[0];                     
             this.penXPos = penXPos;
             this.penYPos = penYPos;
@@ -29,6 +29,8 @@ namespace ASE_Project
                       
         public void exeCommand()
         {
+            Shapes s; 
+            ShapesFactory factory = new ShapesFactory();
             try
             {
                 if (command.Equals("moveto"))                               // Move pen command
@@ -48,8 +50,9 @@ namespace ASE_Project
                     parameter2 = convertParameter(commandParts[2]);
                     if (!invalidParameter && !parameterOutOfBounds)
                     {
-                        Shapes L = new Line(penXPos, penYPos, parameter1, parameter2);      // Simplifiable?
-                        L.draw(g);
+                        s = factory.getShape("line");
+                        s.setParams(penXPos, penYPos, parameter1, parameter2);
+                        s.draw(g);
                         movePen(parameter1, parameter2);
                     }
                 }
@@ -58,8 +61,9 @@ namespace ASE_Project
                     radius = convertParameter(commandParts[1]);
                     if (!invalidParameter)
                     {
-                        Shapes C = new Circle(penXPos - radius, penYPos - radius, radius);  // this object should be removed from memory on clear?
-                        C.draw(g);
+                        s = factory.getShape("circle");
+                        s.setParams(penXPos - radius, penYPos - radius, radius);                        
+                        s.draw(g);
                     }
                 }
                 else if (commandParts[0].Equals("rectangle"))                       // Rectangle command
@@ -68,8 +72,9 @@ namespace ASE_Project
                     height = convertParameter(commandParts[2]);
                     if (!invalidParameter)
                     {
-                        Shapes R = new Rectangle(penXPos - (width / 2), penYPos - (height / 2), width, height);
-                        R.draw(g);
+                        s = factory.getShape("rectangel");
+                        s.setParams(penXPos - (width / 2), penYPos - (height / 2), width, height);                     
+                        s.draw(g);
                     }
                 }
                 else if (commandParts[0].Equals("triangle"))                        // Triangle command
@@ -78,12 +83,10 @@ namespace ASE_Project
                     parameter2 = convertParameter(commandParts[2]);
                     if(!invalidParameter)
                     {
-                        //checkValidTriangle(parameter1, parameter2, parameter3);
-                        //if(!invalidTriangle)
-                        //{
-                            Shapes T = new Triangle(penXPos, penYPos, parameter1, parameter2);
-                            T.draw(g);
-                        //}                       
+                        s = factory.getShape("triangle");
+                        s.setParams(penXPos, penYPos, parameter1, parameter2);
+                        s.draw(g);
+                                              
                     }
                 }
                 else if (commandParts[0].Equals("clear"))                           // Clear paint window command

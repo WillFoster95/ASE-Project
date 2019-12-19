@@ -11,15 +11,10 @@ using System.Windows.Forms;
 
 namespace ASE_Project
 {
-    // check pen is within drawing area?
-    // check vaild commands
-    // check valid parameters
+    // check pen is within drawing area?    
     // deal with the triangle situation
     // add console text output to show what's happening
    
-    // save/load
-
-
     public partial class Form1 : Form
     {
         private string command;

@@ -10,6 +10,12 @@ namespace ASE_Project
     class Circle : Shapes
     {
         private int radius;
+
+        public Circle()
+        {
+
+        }
+
         public Circle(int xPos, int yPos, int radius) : base(xPos, yPos)
         {
             this.radius = radius;

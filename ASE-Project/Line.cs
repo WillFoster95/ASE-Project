@@ -10,6 +10,12 @@ namespace ASE_Project
     class Line : Shapes
     {
         private int xEnd, yEnd;
+
+        public Line()
+        {
+
+        }
+
         public Line(int xPos, int yPos, int xEnd, int yEnd) : base(xPos, yPos)
         {
             this.xEnd = xEnd;

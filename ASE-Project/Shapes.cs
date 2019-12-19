@@ -11,6 +11,11 @@ namespace ASE_Project
     {
         protected int xPos, yPos;
 
+        public Shapes()
+        {
+
+        }
+
         public Shapes(int xPos, int yPos)
         {
             this.xPos = xPos;

@@ -10,6 +10,12 @@ namespace ASE_Project
     class Rectangle : Shapes
     {
         private int width, height;
+
+        public Rectangle()
+        {
+
+        }
+
         public Rectangle(int xPos, int yPos, int width, int height) : base(xPos, yPos)
         {
             this.width = width;

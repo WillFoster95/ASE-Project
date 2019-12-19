@@ -11,6 +11,12 @@ namespace ASE_Project
     {
         private int sideA, sideB, sideC;
         private int corner1X, corner1Y, corner2X, corner2Y, corner3X, corner3Y;
+
+        public Triangle()
+        {
+
+        }
+
         public Triangle(int xPos, int yPos, int sideA, int sideB) : base(xPos, yPos)
         {
             corner1X = xPos - sideA/2;
@@ -20,6 +26,17 @@ namespace ASE_Project
             corner3X = xPos;
             corner3Y = yPos - sideB/2;
         }
+
+        public override void setParams(params int[] dimensions)
+        {
+            corner1X = dimensions[0] - dimensions[2] / 2;
+            corner1Y = dimensions[1] + dimensions[3] / 2;
+            corner2X = dimensions[0] + dimensions[2] / 2;
+            corner2Y = dimensions[1] + dimensions[3] / 2;
+            corner3X = dimensions[0];
+            corner3Y = dimensions[1] - dimensions[3] / 2;
+        }
+
 
         public override void draw(Graphics g)
         {
