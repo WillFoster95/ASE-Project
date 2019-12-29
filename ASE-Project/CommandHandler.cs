@@ -114,6 +114,12 @@ namespace ASE_Project
                     variableDict.Add(commandParts[1], parameter2);
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
                 }
+                else if (command.Equals("add"))
+                {
+                    parameter2 = convertParameter(commandParts[2]);
+                    variableDict[commandParts[1]] = variableDict[commandParts[1]] + parameter2;
+                    consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
+                }
             }
             catch (System.IndexOutOfRangeException)
             {
@@ -129,7 +135,7 @@ namespace ASE_Project
         {
             if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle") ||
                 command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || 
-                command.Equals("var") || command.Equals("while"))
+                command.Equals("var") || command.Equals("while") || (command.Equals("add")))
             {                
                 return true;
             }
@@ -176,6 +182,7 @@ namespace ASE_Project
             instruction = instruction.ToLower();
             return instruction;
         }
+
         private int convertParameter(string parameter)
         {
             int param = 0;
@@ -184,13 +191,15 @@ namespace ASE_Project
             {
                 param = Convert.ToInt32(parameter);
             }
-            catch
+            catch                                                   //bad use of try catch
             {
-                consoleMessage += "\"" + parameter + "\" " + "is not a vaild parameter\n";
-                invalidParameter = true;
+                param = variableDict[parameter];
+                //consoleMessage += "\"" + parameter + "\" " + "is not a vaild parameter\n";
+                //invalidParameter = true;
             }
             return param;
         }
+
         private bool checkParameterOutOfBounds(int xParam, int yParam)
         {            
             if (xParam > 445 || xParam < 0)

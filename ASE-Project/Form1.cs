@@ -18,11 +18,13 @@ namespace ASE_Project
     public partial class Form1 : Form
     {
         private string command, whileCondition;
-        private string[] commandList, whileLoopBlock, conditionStatementParts;
+        private string[] commandList, conditionStatementParts;
         private int penXPos, penYPos;        
         private Graphics g;
         private string codeWindowText;
-        
+        private List<string> whileLoopBlock = new List<string>();
+
+
         CommandHandler ch;
         public Form1()
         {
@@ -65,9 +67,10 @@ namespace ASE_Project
                     else if (ch.getCommand().Equals("while"))
                     {
                         storeWhileBlock(i);
-                        whileCondition = commandList[i].Remove(0, 6);
+                        whileCondition = commandList[i].Remove(0, 6);                        
                         exeWhileLoop();
-                        i = i + whileLoopBlock.Length + 2;
+                        i = i + whileLoopBlock.Count + 1;
+                        whileLoopBlock.Clear();                       
                     }
                     else
                     {
@@ -90,41 +93,74 @@ namespace ASE_Project
                 }
                 else
                 {
-                    whileLoopBlock[j - (whileStart + 1)] = commandList[j];
+                    whileLoopBlock.Add(commandList[j]);
                 }
             }
         }
 
         private void exeWhileLoop()
         {
-            conditionChecker(whileCondition);
-             
+            int k = 0;
+            while(conditionChecker(whileCondition))
+            {
+                ch.newCommand(whileLoopBlock[k], penXPos, penYPos);
+                ch.exeCommand();
+                console.Text += ch.getMessage();
+                penXPos = ch.getPenXPos();
+                penYPos = ch.getPenYPos();
+                k++;
+            }           
         }
 
         private bool conditionChecker(string conditionStatement)
         {
             conditionStatementParts = conditionStatement.Split(' ');
+            int val1, val2;
+            try
+            {
+                val1 = Convert.ToInt32(conditionStatementParts[0]);
+            }
+            catch
+            {
+                val1 = ch.getVariableValue(conditionStatementParts[0]);
+            }
+            try
+            {
+                val2 = Convert.ToInt32(conditionStatementParts[2]);
+            }
+            catch
+            {
+                val2 = ch.getVariableValue(conditionStatementParts[2]);
+            }
+
             if (conditionStatementParts[1].Equals("="))
             {
-
+                if(val1 == val2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else if (conditionStatementParts[1].Equals("<"))
             {
-
+                return false;
             }
             else if (conditionStatementParts[1].Equals(">"))
             {
-
+                return false;
             }
             else if (conditionStatementParts[1].Equals(">="))
             {
-
+                return false;
             }
             else if (conditionStatementParts[1].Equals("<="))
             {
-
+                return false;
             }
-            return true;
+            return false;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
