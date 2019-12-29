@@ -119,7 +119,7 @@ namespace ASE_Project
             {
                 consoleMessage += "Missing Parameter\n";
             }
-        }
+        }     
 
         public string getMessage()
         {
@@ -128,7 +128,8 @@ namespace ASE_Project
         public bool checkCommandValid()
         {
             if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle") ||
-                command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || command.Equals("var"))
+                command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || 
+                command.Equals("var") || command.Equals("while"))
             {                
                 return true;
             }
@@ -149,6 +150,18 @@ namespace ASE_Project
         public string getCommand()
         {
             return command;
+        }
+        public string getCommandPart1()
+        {
+            return commandParts[1];
+        }
+        public string getCommandPart2()
+        {
+            return commandParts[2];
+        }
+        public string getCommandPart3()
+        {
+            return commandParts[3];
         }
 
         private void movePen(int x, int y)
@@ -201,7 +214,7 @@ namespace ASE_Project
         }
         public int getVariableValue(string varName)
         {
-            return 0;
+            return variableDict[varName];
         }
     }
 }

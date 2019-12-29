@@ -17,12 +17,12 @@ namespace ASE_Project
    
     public partial class Form1 : Form
     {
-        private string command;
-        private string[] commandList;
+        private string command, whileCondition;
+        private string[] commandList, whileLoopBlock, conditionStatementParts;
         private int penXPos, penYPos;        
         private Graphics g;
         private string codeWindowText;
-        private bool commandValid;
+        
         CommandHandler ch;
         public Form1()
         {
@@ -62,6 +62,13 @@ namespace ASE_Project
                     {                        
                         console.Text += ch.getMessage();
                     }
+                    else if (ch.getCommand().Equals("while"))
+                    {
+                        storeWhileBlock(i);
+                        whileCondition = commandList[i].Remove(0, 6);
+                        exeWhileLoop();
+                        i = i + whileLoopBlock.Length + 2;
+                    }
                     else
                     {
                         ch.exeCommand();
@@ -73,7 +80,52 @@ namespace ASE_Project
             }          
         }            
 
+        private void storeWhileBlock(int whileStart)
+        {
+            for (int j = whileStart + 1; j < commandList.Length; j++)
+            {
+                if (commandList[j].Equals("endwhile"))
+                {
+                    break;
+                }
+                else
+                {
+                    whileLoopBlock[j - (whileStart + 1)] = commandList[j];
+                }
+            }
+        }
 
+        private void exeWhileLoop()
+        {
+            conditionChecker(whileCondition);
+             
+        }
+
+        private bool conditionChecker(string conditionStatement)
+        {
+            conditionStatementParts = conditionStatement.Split(' ');
+            if (conditionStatementParts[1].Equals("="))
+            {
+
+            }
+            else if (conditionStatementParts[1].Equals("<"))
+            {
+
+            }
+            else if (conditionStatementParts[1].Equals(">"))
+            {
+
+            }
+            else if (conditionStatementParts[1].Equals(">="))
+            {
+
+            }
+            else if (conditionStatementParts[1].Equals("<="))
+            {
+
+            }
+            return true;
+        }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
