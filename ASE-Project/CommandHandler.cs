@@ -151,13 +151,13 @@ namespace ASE_Project
                     parameter2 = convertParameter(commandParts[3]);
                     variableDict[commandParts[1]] = parameter1 / parameter2;
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
-                }
+                }                
             }
             catch (System.IndexOutOfRangeException)
             {
                 consoleMessage += "Missing Parameter\n";
             }
-        }     
+        }
 
         public string getMessage()
         {
