@@ -17,12 +17,16 @@ namespace ASE_Project
    
     public partial class Form1 : Form
     {
-        private string command, whileCondition;
-        private string[] commandList, conditionStatementParts;
-        private int penXPos, penYPos;        
+        private string whileCondition, ifCondition, syntaxErrorMessage;
+        private string[] commandList, conditionStatementParts, SCcommand;
+        private string[] recognisedCommands = { "var", "add", "sub", "mul", "div", "if", "while", "circle", "rectangle", 
+            "triangle", "drawto", "moveto", "clear", "resetpen", "method" };
+        private int penXPos, penYPos, temp;        
         private Graphics g;
         private string codeWindowText;
         private List<string> whileLoopBlock = new List<string>();
+        private List<string> ifBlock = new List<string>();
+        Dictionary<string, string> methods = new Dictionary<string, string>();
 
 
         CommandHandler ch;
@@ -56,32 +60,58 @@ namespace ASE_Project
             {
                 codeWindowText = codeWindow.Text;
                 commandList = codeWindowText.Split('\n');
-                
-                for (int i = 0; i < commandList.Length; i++)
+                if(syntaxChecker(commandList))
                 {
-                    ch.newCommand(commandList[i], penXPos, penYPos);
-                    if (!ch.checkCommandValid())
-                    {                        
-                        console.Text += ch.getMessage();
-                    }
-                    else if (ch.getCommand().Equals("while"))
+                    for (int i = 0; i < commandList.Length; i++)
                     {
-                        storeWhileBlock(i);
-                        whileCondition = commandList[i].Remove(0, 6);                        
-                        exeWhileLoop();
-                        i = i + whileLoopBlock.Count + 1;
-                        whileLoopBlock.Clear();                       
+                        ch.newCommand(commandList[i], penXPos, penYPos);
+                        if (!ch.checkCommandValid())
+                        {
+                            console.Text += ch.getMessage();
+                        }
+                        else if (ch.getCommand().Equals("while"))
+                        {
+                            storeWhileBlock(i);
+                            whileCondition = commandList[i].Remove(0, 6);
+                            exeWhileLoop();
+                            i = i + whileLoopBlock.Count + 1;
+                            whileLoopBlock.Clear();
+                        }
+                        else if (ch.getCommand().Equals("if"))
+                        {
+                            ifCondition = commandList[i].Remove(0, 3);
+                            storeIfBlock(i);
+                            if (conditionChecker(ifCondition))
+                            {
+                                for (int k = 0; k < ifBlock.Count; k++)
+                                {
+                                    ch.newCommand(ifBlock[k], penXPos, penYPos);
+                                    ch.exeCommand();
+                                    console.Text += ch.getMessage();
+                                    penXPos = ch.getPenXPos();
+                                    penYPos = ch.getPenYPos();
+                                }
+                            }
+                            i = i + ifBlock.Count + 1;
+                            ifBlock.Clear();
+                        }
+                        else
+                        {
+                            ch.exeCommand();
+                            console.Text += ch.getMessage();
+                            penXPos = ch.getPenXPos();
+                            penYPos = ch.getPenYPos();
+                        }
                     }
-                    else
-                    {
-                        ch.exeCommand();
-                        console.Text += ch.getMessage();
-                        penXPos = ch.getPenXPos();
-                        penYPos = ch.getPenYPos();
-                    }                   
+                }
+                else
+                {
+                    console.Text += syntaxErrorMessage;
                 }
             }          
-        }            
+        }
+
+        
 
         private void storeWhileBlock(int whileStart)
         {
@@ -94,6 +124,20 @@ namespace ASE_Project
                 else
                 {
                     whileLoopBlock.Add(commandList[j]);
+                }
+            }
+        }
+        private void storeIfBlock(int ifStart)
+        {
+            for (int j = ifStart + 1; j < commandList.Length; j++)
+            {
+                if (commandList[j].Equals("endif"))
+                {
+                    break;
+                }
+                else
+                {
+                    ifBlock.Add(commandList[j]);
                 }
             }
         }
@@ -188,6 +232,63 @@ namespace ASE_Project
             return false;
         }
 
+        
+        private bool syntaxChecker(string[] comList)
+        {
+            for(int i = 0; i < comList.Length; i++)
+            {
+
+                SCcommand = comList[i].Split(' ');
+
+                for (int j = 0; j < recognisedCommands.Length; j++)                             //wont work with methods?
+                {                   
+                    if (SCcommand[0].Equals(recognisedCommands[j]))
+                    {
+                        break;
+                    }
+                    if (j == recognisedCommands.Length - 1)
+                    {
+                        //command not recognised check if there is a method with this name
+                        syntaxErrorMessage = "Command not recognised at: " + comList[i] + "\n";
+                        return false;
+                    }
+                }
+                /*
+                if(SCcommand.Length<2)
+                {
+                    syntaxErrorMessage = "Missing parameter/s at: " + comList[i] + "\n";
+                    return false;
+                }
+                */
+
+                if (SCcommand[0].Equals("var"))
+                {
+
+                }
+                if (SCcommand[0].Equals("sub") || SCcommand[0].Equals("div") || SCcommand[0].Equals("mul") || SCcommand[0].Equals("add"))
+                {
+                    if (int.TryParse(SCcommand[1], out temp))
+                    {
+                        syntaxErrorMessage = "The 1st parameter(" + SCcommand[1] + ") at: \"" + comList[i] + "\" should not be a number.\n";
+                        return false;
+                    }
+                    if (SCcommand.Length < 4)
+                    {
+                        syntaxErrorMessage = "Missing parameter/s at: " + comList[i] + "\n";
+                        return false;
+                    }
+                    if (SCcommand.Length > 4)
+                    {
+                        syntaxErrorMessage = "Missing parameter/s at: " + comList[i] + "\n";
+                        return false;
+                    }
+
+                }
+            }
+
+            return true;
+        }
+               
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();            

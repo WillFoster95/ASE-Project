@@ -111,8 +111,16 @@ namespace ASE_Project
                 else if (command.Equals("var"))
                 {
                     parameter1 = convertParameter(commandParts[2]);
-                    variableDict.Add(commandParts[1], parameter1);
-                    consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
+                    try
+                    {
+                        variableDict.Add(commandParts[1], parameter1);
+                        consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
+                    }
+                    catch (ArgumentException)
+                    {
+                        consoleMessage += "the variable " + commandParts[1] + " already exists \n";
+                    }
+                    
                 }
                 else if (command.Equals("add"))
                 {
@@ -158,7 +166,7 @@ namespace ASE_Project
             if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle") ||
                 command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || 
                 command.Equals("var") || command.Equals("while") || command.Equals("add") || command.Equals("sub") || command.Equals("mul") || 
-                command.Equals("div"))
+                command.Equals("div") || command.Equals("if"))
             {                
                 return true;
             }
@@ -233,8 +241,6 @@ namespace ASE_Project
             return false;
         }
 
-
-
         public string getMethodName()
         {
             return "";
@@ -242,6 +248,18 @@ namespace ASE_Project
         public int getVariableValue(string varName)
         {
             return variableDict[varName];
+        }
+        public bool checkVariableExists(string varName)
+        {
+            try
+            {
+                int a = variableDict[varName];
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
