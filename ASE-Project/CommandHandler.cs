@@ -110,26 +110,36 @@ namespace ASE_Project
                 }
                 else if (command.Equals("var"))
                 {
-                    parameter2 = convertParameter(commandParts[2]);
-                    variableDict.Add(commandParts[1], parameter2);
+                    parameter1 = convertParameter(commandParts[2]);
+                    variableDict.Add(commandParts[1], parameter1);
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
                 }
                 else if (command.Equals("add"))
                 {
-                    parameter2 = convertParameter(commandParts[2]);
-                    variableDict[commandParts[1]] = variableDict[commandParts[1]] + parameter2;
+                    parameter1 = convertParameter(commandParts[2]);
+                    parameter2 = convertParameter(commandParts[3]);
+                    variableDict[commandParts[1]] = parameter1 + parameter2;
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
                 }
                 else if (command.Equals("sub"))
                 {
-                    parameter2 = convertParameter(commandParts[2]);
-                    variableDict[commandParts[1]] = variableDict[commandParts[1]] - parameter2;
+                    parameter1 = convertParameter(commandParts[2]);
+                    parameter2 = convertParameter(commandParts[3]);
+                    variableDict[commandParts[1]] = parameter1 - parameter2;
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
                 }
                 else if (command.Equals("mul"))
                 {
-                    parameter2 = convertParameter(commandParts[2]);
-                    variableDict[commandParts[1]] = variableDict[commandParts[1]] * parameter2;
+                    parameter1 = convertParameter(commandParts[2]);
+                    parameter2 = convertParameter(commandParts[3]);
+                    variableDict[commandParts[1]] = parameter1 * parameter2;
+                    consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
+                }
+                else if (command.Equals("div"))
+                {
+                    parameter1 = convertParameter(commandParts[2]);
+                    parameter2 = convertParameter(commandParts[3]);
+                    variableDict[commandParts[1]] = parameter1 / parameter2;
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
                 }
             }
@@ -147,7 +157,8 @@ namespace ASE_Project
         {
             if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle") ||
                 command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || 
-                command.Equals("var") || command.Equals("while") || command.Equals("add") || command.Equals("sub") || command.Equals("mul"))
+                command.Equals("var") || command.Equals("while") || command.Equals("add") || command.Equals("sub") || command.Equals("mul") || 
+                command.Equals("div"))
             {                
                 return true;
             }
