@@ -20,14 +20,15 @@ namespace ASE_Project
         private string whileCondition, ifCondition, syntaxErrorMessage;
         private string[] commandList, conditionStatementParts, SCcommand;
         private string[] recognisedCommands = { "var", "add", "sub", "mul", "div", "if", "while", "circle", "rectangle", 
-            "triangle", "drawto", "moveto", "clear", "resetpen", "method" };
+            "triangle", "drawto", "moveto", "clear", "resetpen", "method", "endif", "endwhile", "endmethod" };
         private int penXPos, penYPos, temp;        
         private Graphics g;
         private string codeWindowText;
         private List<string> whileLoopBlock = new List<string>();
         private List<string> ifBlock = new List<string>();
         Dictionary<string, string> methods = new Dictionary<string, string>();
-
+        private List<string> variableNames = new List<string>();
+        private List<string> methodNames = new List<string>();
 
         CommandHandler ch;
         public Form1()
@@ -65,11 +66,13 @@ namespace ASE_Project
                     for (int i = 0; i < commandList.Length; i++)
                     {
                         ch.newCommand(commandList[i], penXPos, penYPos);
+                        /*
                         if (!ch.checkCommandValid())
                         {
                             console.Text += ch.getMessage();
                         }
-                        else if (ch.getCommand().Equals("while"))
+                        */
+                        if (ch.getCommand().Equals("while"))
                         {
                             storeWhileBlock(i);
                             whileCondition = commandList[i].Remove(0, 6);
@@ -235,12 +238,19 @@ namespace ASE_Project
         
         private bool syntaxChecker(string[] comList)
         {
-            for(int i = 0; i < comList.Length; i++)
+            bool goodSyntax = true;
+            for(int i = 0; i < comList.Length; i++)                                             //List all method names
             {
-
                 SCcommand = comList[i].Split(' ');
-
-                for (int j = 0; j < recognisedCommands.Length; j++)                             //wont work with methods?
+                if (SCcommand[0].Equals("method"))
+                {
+                    methodNames.Add(SCcommand[1]);
+                }
+            }
+            for(int i = 0; i < comList.Length; i++)                                            
+            {
+                SCcommand = comList[i].Split(' ');
+                for (int j = 0; j < recognisedCommands.Length; j++)                             //check if command recognised including going through method names                             
                 {                   
                     if (SCcommand[0].Equals(recognisedCommands[j]))
                     {
@@ -248,45 +258,63 @@ namespace ASE_Project
                     }
                     if (j == recognisedCommands.Length - 1)
                     {
-                        //command not recognised check if there is a method with this name
-                        syntaxErrorMessage = "Command not recognised at: " + comList[i] + "\n";
-                        return false;
+                        if(methodNames.Count == 0)
+                        {
+                            syntaxErrorMessage += "Command not recognised at: " + comList[i] + "\n";
+                            goodSyntax = false;
+                        }
+                        for(int k = 0; k < methodNames.Count; k++)
+                        {
+                            if (SCcommand[0].Equals(methodNames[k]))
+                            {
+                                break;
+                            }
+                            if(k == methodNames.Count - 1)
+                            {
+                                syntaxErrorMessage += "Command not recognised at: " + comList[i] + "\n";
+                                goodSyntax = false;
+                            }
+                        }                       
                     }
                 }
-                /*
-                if(SCcommand.Length<2)
-                {
-                    syntaxErrorMessage = "Missing parameter/s at: " + comList[i] + "\n";
-                    return false;
-                }
-                */
 
                 if (SCcommand[0].Equals("var"))
                 {
-
+                    if(variableNames.Contains(SCcommand[1]))
+                    {
+                        syntaxErrorMessage += "The variable: \"" + SCcommand[1] + "\" is declared more than once. \n";
+                        goodSyntax = false;
+                    }
+                    else
+                    {
+                        variableNames.Add(SCcommand[1]);
+                    }
+                    
                 }
                 if (SCcommand[0].Equals("sub") || SCcommand[0].Equals("div") || SCcommand[0].Equals("mul") || SCcommand[0].Equals("add"))
                 {
                     if (int.TryParse(SCcommand[1], out temp))
                     {
-                        syntaxErrorMessage = "The 1st parameter(" + SCcommand[1] + ") at: \"" + comList[i] + "\" should not be a number.\n";
-                        return false;
+                        syntaxErrorMessage += "The 1st parameter(" + SCcommand[1] + ") at: \"" + comList[i] + "\" should not be a number.\n";
+                        goodSyntax = false;
                     }
                     if (SCcommand.Length < 4)
                     {
-                        syntaxErrorMessage = "Missing parameter/s at: " + comList[i] + "\n";
-                        return false;
+                        syntaxErrorMessage += "Missing parameter/s at: " + comList[i] + "\n";
+                        goodSyntax = false;
                     }
                     if (SCcommand.Length > 4)
                     {
-                        syntaxErrorMessage = "Missing parameter/s at: " + comList[i] + "\n";
-                        return false;
+                        syntaxErrorMessage += "Missing parameter/s at: " + comList[i] + "\n";
+                        goodSyntax = false;
                     }
 
                 }
             }
+            variableNames.Clear();
+            methodNames.Clear();
 
-            return true;
+            return goodSyntax;
         }
                
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)

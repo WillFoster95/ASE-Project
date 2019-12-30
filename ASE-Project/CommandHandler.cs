@@ -102,6 +102,8 @@ namespace ASE_Project
                 else if (command.Equals("clear"))                           // Clear paint window command
                 {
                     g.Clear(Color.White);
+                    variableDict.Clear();
+                    //methodDict.Clear();
                     consoleMessage += "cleared\n";                                              // Console cleared too
                 }
                 else if (commandParts[0].Equals("resetpen"))                        // Reset pen to top left command
@@ -166,7 +168,7 @@ namespace ASE_Project
             if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle") ||
                 command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || 
                 command.Equals("var") || command.Equals("while") || command.Equals("add") || command.Equals("sub") || command.Equals("mul") || 
-                command.Equals("div") || command.Equals("if"))
+                command.Equals("div") || command.Equals("if") || command.Equals("method"))
             {                
                 return true;
             }
