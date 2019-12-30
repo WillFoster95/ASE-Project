@@ -120,6 +120,18 @@ namespace ASE_Project
                     variableDict[commandParts[1]] = variableDict[commandParts[1]] + parameter2;
                     consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
                 }
+                else if (command.Equals("sub"))
+                {
+                    parameter2 = convertParameter(commandParts[2]);
+                    variableDict[commandParts[1]] = variableDict[commandParts[1]] - parameter2;
+                    consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
+                }
+                else if (command.Equals("mul"))
+                {
+                    parameter2 = convertParameter(commandParts[2]);
+                    variableDict[commandParts[1]] = variableDict[commandParts[1]] * parameter2;
+                    consoleMessage += "the variable " + commandParts[1] + " has value " + variableDict[commandParts[1]] + "\n";
+                }
             }
             catch (System.IndexOutOfRangeException)
             {
@@ -135,7 +147,7 @@ namespace ASE_Project
         {
             if (command.Equals("run") || command.Equals("moveto") || command.Equals("drawto") || command.Equals("circle") ||
                 command.Equals("rectangle") || command.Equals("triangle") || command.Equals("clear") || command.Equals("resetpen") || 
-                command.Equals("var") || command.Equals("while") || (command.Equals("add")))
+                command.Equals("var") || command.Equals("while") || command.Equals("add") || command.Equals("sub") || command.Equals("mul"))
             {                
                 return true;
             }
@@ -187,16 +199,11 @@ namespace ASE_Project
         {
             int param = 0;
             invalidParameter = false;
-            try
-            {
-                param = Convert.ToInt32(parameter);
-            }
-            catch                                                   //bad use of try catch
+            bool result = int.TryParse(parameter, out param);
+            if (!result)
             {
                 param = variableDict[parameter];
-                //consoleMessage += "\"" + parameter + "\" " + "is not a vaild parameter\n";
-                //invalidParameter = true;
-            }
+            }           
             return param;
         }
 

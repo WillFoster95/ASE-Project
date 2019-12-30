@@ -100,15 +100,16 @@ namespace ASE_Project
 
         private void exeWhileLoop()
         {
-            int k = 0;
             while(conditionChecker(whileCondition))
             {
-                ch.newCommand(whileLoopBlock[k], penXPos, penYPos);
-                ch.exeCommand();
-                console.Text += ch.getMessage();
-                penXPos = ch.getPenXPos();
-                penYPos = ch.getPenYPos();
-                k++;
+                for (int k = 0; k < whileLoopBlock.Count; k++)
+                {                  
+                    ch.newCommand(whileLoopBlock[k], penXPos, penYPos);
+                    ch.exeCommand();
+                    console.Text += ch.getMessage();
+                    penXPos = ch.getPenXPos();
+                    penYPos = ch.getPenYPos();
+                }
             }           
         }
 
@@ -116,19 +117,14 @@ namespace ASE_Project
         {
             conditionStatementParts = conditionStatement.Split(' ');
             int val1, val2;
-            try
-            {
-                val1 = Convert.ToInt32(conditionStatementParts[0]);
-            }
-            catch
+            bool intcheck;
+            intcheck = int.TryParse(conditionStatementParts[0], out val1);
+            if(!intcheck)
             {
                 val1 = ch.getVariableValue(conditionStatementParts[0]);
             }
-            try
-            {
-                val2 = Convert.ToInt32(conditionStatementParts[2]);
-            }
-            catch
+            intcheck = int.TryParse(conditionStatementParts[2], out val2);
+            if (!intcheck)
             {
                 val2 = ch.getVariableValue(conditionStatementParts[2]);
             }
@@ -146,19 +142,48 @@ namespace ASE_Project
             }
             else if (conditionStatementParts[1].Equals("<"))
             {
-                return false;
+                if(val1 < val2)
+                {
+                    return true;
+                }
+                else
+                {   
+                    return false;
+                }
+                
             }
             else if (conditionStatementParts[1].Equals(">"))
             {
-                return false;
+                if (val1 > val2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else if (conditionStatementParts[1].Equals(">="))
             {
-                return false;
+                if (val1 >= val2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else if (conditionStatementParts[1].Equals("<="))
             {
-                return false;
+                if (val1 <= val2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             return false;
         }
