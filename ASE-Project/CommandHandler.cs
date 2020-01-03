@@ -19,11 +19,14 @@ namespace ASE_Project
        
         Dictionary<string, int> variableDict = new Dictionary<string, int>();
 
-        public CommandHandler(Graphics g)
+        public CommandHandler()
         {                    
-            this.g = g;        
+       
         }
-
+        public void setGraphics(Graphics g)
+        {
+            this.g = g;
+        }
         public void newCommand(string command, int penXPos, int penYPos)
         {
             consoleMessage = "";

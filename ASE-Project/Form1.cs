@@ -39,7 +39,8 @@ namespace ASE_Project
         private void Form1_Load(object sender, EventArgs e)                     //Runs on Load
         {            
             g = paintWindow.CreateGraphics();    
-            ch = new CommandHandler(g);
+            ch = new CommandHandler();
+            ch.setGraphics(g);
 
         }
 
@@ -59,10 +60,11 @@ namespace ASE_Project
             }                                
             else if (ch.getCommand().Equals("run"))
             {
-                codeWindowText = codeWindow.Text;
+                codeWindowText = codeWindow.Text.ToLower();
                 commandList = codeWindowText.Split('\n');
                 if(syntaxChecker(commandList))
                 {
+                    handleMethods(commandList);
                     for (int i = 0; i < commandList.Length; i++)
                     {
                         ch.newCommand(commandList[i], penXPos, penYPos);
@@ -81,7 +83,7 @@ namespace ASE_Project
                         else if (ch.getCommand().Equals("if"))
                         {                            
                             i = exeIf(i);                           
-                        }
+                        }                        
                         
                         else
                         {
@@ -167,8 +169,7 @@ namespace ASE_Project
                     whileLoopBlock.Add(commandList[j]);
                 }
             }
-        }
-        
+        } 
         private void storeIfBlock(int ifStart)
         {
             for (int j = ifStart + 1; j < commandList.Length; j++)
@@ -184,7 +185,20 @@ namespace ASE_Project
             }
         }
 
-        
+        private void handleMethods(string[] allCommands)
+        {
+            string methodName;
+            int methStart, methEnd;
+            
+            for (int i = 0; i < allCommands.Length; i++)
+            {
+                if (allCommands[i].StartsWith("method "))
+                {
+                    methodName = allCommands[i].Split(' ')[1];
+                    methStart = i;
+                }                
+            }
+        }
 
         private bool conditionChecker(string conditionStatement)
         {
@@ -259,8 +273,7 @@ namespace ASE_Project
                 }
             }
             return false;
-        }
-        
+        }       
         private bool syntaxChecker(string[] comList)
         {
             bool goodSyntax = true;
