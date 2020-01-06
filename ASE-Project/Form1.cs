@@ -18,17 +18,18 @@ namespace ASE_Project
     public partial class Form1 : Form
     {
         private string whileCondition, ifCondition, syntaxErrorMessage;
-        private string[] commandList, conditionStatementParts, SCcommand;
+        private string[] commandList, conditionStatementParts, SCcommand, methodCommands;
         private string[] recognisedCommands = { "var", "add", "sub", "mul", "div", "if", "while", "circle", "rectangle", 
             "triangle", "drawto", "moveto", "clear", "resetpen", "method", "endif", "endwhile", "endmethod" };
         private int penXPos, penYPos, temp;        
         private Graphics g;
         private string codeWindowText;
         private List<string> whileLoopBlock = new List<string>();
-        private List<string> ifBlock = new List<string>();
-        Dictionary<string, string> methods = new Dictionary<string, string>();
+        private List<string> ifBlock = new List<string>();        
         private List<string> variableNames = new List<string>();
         private List<string> methodNames = new List<string>();
+        private List<int> skipDueToMethod = new List<int>();
+        Dictionary<string, string> methods = new Dictionary<string, string>();
 
         CommandHandler ch;
         public Form1()
@@ -68,6 +69,24 @@ namespace ASE_Project
                     for (int i = 0; i < commandList.Length; i++)
                     {
                         ch.newCommand(commandList[i], penXPos, penYPos);
+                        if (skipDueToMethod.Contains(i))
+                        {
+                            continue;
+                        }
+                        else if (methods.ContainsKey(ch.getCommand()))
+                        {
+                            methodCommands = methods[commandList[i]].Split('\n');
+                            for (int j = 1; j < methodCommands.Length - 1; j++)
+                            {
+                                ch.newCommand(methodCommands[j], penXPos, penYPos);
+                                ch.exeCommand();
+                                console.Text += ch.getMessage();
+                                penXPos = ch.getPenXPos();
+                                penYPos = ch.getPenYPos();
+                            }
+                            
+                        }
+                        
                         /*
                         if (!ch.checkCommandValid())
                         {
@@ -75,7 +94,7 @@ namespace ASE_Project
                         }
                         */
                         
-                        if (ch.getCommand().Equals("while"))
+                        else if (ch.getCommand().Equals("while"))
                         {
                             i = exeWhileLoop(i);
                         }
@@ -188,7 +207,7 @@ namespace ASE_Project
         private void handleMethods(string[] allCommands)
         {
             string methodName;
-            int methStart, methEnd;
+            int methStart, methEnd = 0;
             
             for (int i = 0; i < allCommands.Length; i++)
             {
@@ -196,8 +215,28 @@ namespace ASE_Project
                 {
                     methodName = allCommands[i].Split(' ')[1];
                     methStart = i;
+                    for (int j = i; j < allCommands.Length; j++)
+                    {
+                        if (allCommands[j].StartsWith("endmethod"))
+                        {
+                            methEnd = j;
+                            break;
+                        }                       
+                    }
+                    storeMethod(methodName, methStart, methEnd);
                 }                
             }
+        }
+
+        public void storeMethod(string methodName, int methodStartPos, int methodEndPos)
+        {
+            string commands = "";
+            for (int i = methodStartPos; i <= methodEndPos; i++)
+            {
+                commands += commandList[i] + "\n";
+                skipDueToMethod.Add(i);
+            }
+            methods.Add(methodName, commands);           
         }
 
         private bool conditionChecker(string conditionStatement)
