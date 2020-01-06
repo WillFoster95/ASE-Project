@@ -79,12 +79,23 @@ namespace ASE_Project
                             for (int j = 1; j < methodCommands.Length - 1; j++)
                             {
                                 ch.newCommand(methodCommands[j], penXPos, penYPos);
-                                ch.exeCommand();
-                                console.Text += ch.getMessage();
-                                penXPos = ch.getPenXPos();
-                                penYPos = ch.getPenYPos();
-                            }
-                            
+                                if (ch.getCommand().Equals("while"))
+                                {
+                                    j = exeWhileLoop(j, methodCommands);
+                                }
+
+                                else if (ch.getCommand().Equals("if"))
+                                {
+                                    j = exeIf(j, methodCommands);
+                                }
+                                else
+                                {
+                                    ch.exeCommand();
+                                    console.Text += ch.getMessage();
+                                    penXPos = ch.getPenXPos();
+                                    penYPos = ch.getPenYPos();
+                                }                               
+                            }                           
                         }
                         
                         /*
@@ -96,12 +107,12 @@ namespace ASE_Project
                         
                         else if (ch.getCommand().Equals("while"))
                         {
-                            i = exeWhileLoop(i);
+                            i = exeWhileLoop(i, commandList);
                         }
                         
                         else if (ch.getCommand().Equals("if"))
                         {                            
-                            i = exeIf(i);                           
+                            i = exeIf(i, commandList);                           
                         }                        
                         
                         else
@@ -120,21 +131,21 @@ namespace ASE_Project
             }          
         }
 
-        private int exeIf(int pc)
+        private int exeIf(int pc, string[] commandList)
         {
             ifCondition = commandList[pc].Remove(0, 3);
-            storeIfBlock(pc);
+            storeIfBlock(pc, commandList);
             if (conditionChecker(ifCondition))
             {
                 for (int k = 0; k < ifBlock.Count; k++)
                 {
                     if (ifBlock[k].StartsWith("if"))                     //if in if doesnt work as they both use the first endif
                     {
-                        k = exeIf(pc + k + 1) - pc;
+                        k = exeIf(pc + k + 1, commandList) - pc;
                     }
                     if (ifBlock[k].StartsWith("while"))                 
                     {
-                        k = exeWhileLoop(pc + k + 1) - pc;
+                        k = exeWhileLoop(pc + k + 1, commandList) - pc;
                     }
                     ch.newCommand(ifBlock[k], penXPos, penYPos);
                     ch.exeCommand();
@@ -147,9 +158,9 @@ namespace ASE_Project
             ifBlock.Clear();
             return pc;
         }
-        private int exeWhileLoop(int pc)
+        private int exeWhileLoop(int pc, string[] commandList)
         {
-            storeWhileBlock(pc);
+            storeWhileBlock(pc, commandList);
             whileCondition = commandList[pc].Remove(0, 6);
             while (conditionChecker(whileCondition))
             {
@@ -157,11 +168,11 @@ namespace ASE_Project
                 {       
                     if(whileLoopBlock[k].StartsWith("if"))
                     {
-                        k = exeIf(pc + k + 1) - pc;
+                        k = exeIf(pc + k + 1, commandList) - pc;
                     }
                     if (whileLoopBlock[k].StartsWith("while"))                  //while in while doesnt work as they both use the first endwhile
                     {
-                        k = exeWhileLoop(pc + k + 1) - pc;
+                        k = exeWhileLoop(pc + k + 1, commandList) - pc;
                     }
 
                     ch.newCommand(whileLoopBlock[k], penXPos, penYPos);
@@ -175,7 +186,7 @@ namespace ASE_Project
             whileLoopBlock.Clear();
             return pc;
         }
-        private void storeWhileBlock(int whileStart)
+        private void storeWhileBlock(int whileStart, string[] commandList)
         {
             for (int j = whileStart + 1; j < commandList.Length; j++)
             {
@@ -189,7 +200,7 @@ namespace ASE_Project
                 }
             }
         } 
-        private void storeIfBlock(int ifStart)
+        private void storeIfBlock(int ifStart, string[] commandList)
         {
             for (int j = ifStart + 1; j < commandList.Length; j++)
             {
